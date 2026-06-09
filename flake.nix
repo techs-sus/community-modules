@@ -13,7 +13,14 @@
         "aarch64-darwin"
       ];
 
-      forSystems = fn: builtins.listToAttrs (map (system: { name = system; value = fn system; }) systems);
+      forSystems =
+        fn:
+        builtins.listToAttrs (
+          map (system: {
+            name = system;
+            value = fn system;
+          }) systems
+        );
 
       pkgsFor = system: import sources.nixpkgs { inherit system; };
     in

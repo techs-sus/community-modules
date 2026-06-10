@@ -27,11 +27,12 @@ let
       # When enableProfileInstall is false (e.g. in VMs where /nix/store is a
       # read-only bind mount) skip the `nix profile install` step entirely.
       # Packages remain accessible via users.users.<name>.packages.
-      ({ lib, osConfig, ... }: lib.mkIf (!osConfig.home-manager.enableProfileInstall) {
-        home.activation.installPackages = lib.mkForce (
-          lib.hm.dag.entryAfter [ "writeBoundary" ] ""
-        );
-      })
+      (
+        { lib, osConfig, ... }:
+        lib.mkIf (!osConfig.home-manager.enableProfileInstall) {
+          home.activation.installPackages = lib.mkForce (lib.hm.dag.entryAfter [ "writeBoundary" ] "");
+        }
+      )
     ];
     specialArgs = {
       inherit pkgs;
@@ -75,14 +76,12 @@ in
   config = lib.mkIf (cfg.users != { }) {
     services.nix-daemon.enable = lib.mkDefault true;
     warnings = lib.concatLists (
-      lib.mapAttrsToList (user: hmCfg:
-        map (w: "[home-manager/${user}] ${w}") hmCfg.warnings
-      ) cfg.users
+      lib.mapAttrsToList (user: hmCfg: map (w: "[home-manager/${user}] ${w}") hmCfg.warnings) cfg.users
     );
 
     assertions = lib.concatLists (
-      lib.mapAttrsToList (user: hmCfg:
-        map (a: a // { message = "[home-manager/${user}] ${a.message}"; }) hmCfg.assertions
+      lib.mapAttrsToList (
+        user: hmCfg: map (a: a // { message = "[home-manager/${user}] ${a.message}"; }) hmCfg.assertions
       ) cfg.users
     );
 
@@ -99,10 +98,17 @@ in
       in
       lib.nameValuePair "hm-activate-${user}" {
         description = "home-manager activation for ${user}";
-        conditions = [ "service/syslogd/ready" "service/nix-daemon/ready" ];
+        conditions = [
+          "service/syslogd/ready"
+          "service/nix-daemon/ready"
+        ];
         command = "${hmCfg.home.activationPackage}/activate";
         user = user;
-        path = [ pkgs.nix pkgs.coreutils pkgs.bash ];
+        path = [
+          pkgs.nix
+          pkgs.coreutils
+          pkgs.bash
+        ];
         environment = {
           HOME = userCfg.home;
           USER = user;

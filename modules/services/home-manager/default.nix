@@ -38,7 +38,8 @@ let
       inherit pkgs;
       lib = extendedLib;
       osConfig = config;
-    };
+    }
+    // cfg.extraSpecialArgs;
   };
 in
 {
@@ -69,6 +70,16 @@ in
         systemd user session. Only `home.packages`, `home.file`, and
         program configuration options are usable.
         :::
+      '';
+    };
+
+    extraSpecialArgs = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      example = lib.literalExpression "{ inherit inputs; }";
+      description = ''
+        Extra `specialArgs` passed to Home Manager. This option can be used
+        to pass additional arguments to all modules.
       '';
     };
   };

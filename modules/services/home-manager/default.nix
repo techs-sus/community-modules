@@ -16,6 +16,8 @@ let
     lib = extendedLib;
     inherit pkgs;
     check = true;
+
+    useNixpkgsModule = !cfg.useGlobalPkgs;
   };
 
   userType = lib.types.submoduleWith {
@@ -82,6 +84,11 @@ in
         to pass additional arguments to all modules.
       '';
     };
+
+    useGlobalPkgs = lib.mkEnableOption ''
+      Use the system configuration's `pkgs`
+      argument in Home Manager. This disables the Home Manager
+      options {option}`nixpkgs.*`'';
   };
 
   config = lib.mkIf (cfg.users != { }) {

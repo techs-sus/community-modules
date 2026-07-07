@@ -199,7 +199,8 @@ in
             pkgs.procps
             pkgs.getent
             pkgs.kmod
-          ];
+          ]
+          ++ lib.optional config.programs.resolvconf.enable config.programs.resolvconf.package;
           respawn = true;
           log = true;
         };

@@ -32,6 +32,7 @@ in
         "keventd"
         "mdevd"
         "udev"
+        "gardendevd"
       ];
       description = ''
         Determine the device manager to use.

@@ -114,6 +114,16 @@
       '';
     };
 
+    prepared-by = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      description = ''
+        This service is prepared by the named service. Forces this service to restart when the named service does.
+
+        See [Void Linux's documentation](https://man.voidlinux.org/dinit-service.5#prepared) for additional details.
+      '';
+    };
+
     waits-for = lib.mkOption {
       type = with lib.types; listOf str;
       default = [ ];

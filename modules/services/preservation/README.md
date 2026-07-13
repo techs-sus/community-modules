@@ -2,9 +2,7 @@
 
 Declarative management of non-volatile system state for finix systems using finit as PID 1.
 
-Inspired by [impermanence](https://github.com/nix-community/impermanence), but not a drop-in replacement. Instead of relying on shell interpreters, preservation generates a pure initrd script that runs bind mounts and symlinks via finit after `mount-all` — making it compatible with interpreter-free finix systems.
-
-Full documentation and option reference: <https://parzivale.github.io/preservation>
+Inspired by [impermanence](https://github.com/nix-community/impermanence), but not a drop-in replacement. Instead of relying on shell interpreters, preservation generates a pure initrd script that runs bind mounts and symlinks via finit after, gated on the mount task of each preserved root — making it compatible with interpreter-free finix systems.
 
 ## Basic usage
 

@@ -9,6 +9,7 @@ let
 
   inherit (import ./lib.nix { inherit lib; })
     mkFinitInitrdMountCmds
+    escapePath
     ;
 
   allCmds = lib.flatten (lib.mapAttrsToList mkFinitInitrdMountCmds cfg.preserveAt);
@@ -16,6 +17,10 @@ let
     #!/bin/sh
     ${lib.concatStringsSep "\n" allCmds}
   '';
+
+  mountConditions = lib.concatMapStringsSep "," (root: "task/mount-${escapePath root}/success") (
+    lib.attrNames cfg.preserveAt
+  );
 in
 {
   imports = [
@@ -31,7 +36,7 @@ in
       {
         target = "/etc/finit.d/preservation.conf";
         source = pkgs.writeText "preservation-finit-initrd.conf" ''
-          run [S] name:preservation <task/mount-all/success> preservation
+          run [S] name:preservation <${mountConditions}> preservation
         '';
       }
     ];

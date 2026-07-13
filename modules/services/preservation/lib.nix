@@ -26,6 +26,10 @@ rec {
   # concatenates a list of paths using `concatTwoPaths`
   concatPaths = builtins.foldl' concatTwoPaths "";
 
+  # simple path escape into a name safe for use as a finit stanza name and conditions
+  escapePath =
+    s: if s == "/" then "root" else lib.replaceStrings [ "/" ] [ "-" ] (lib.removePrefix "/" s);
+
   # get the parent directory of an absolute path
   parentDirectory =
     path:

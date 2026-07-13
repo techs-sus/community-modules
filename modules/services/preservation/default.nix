@@ -18,9 +18,9 @@ let
     ${lib.concatStringsSep "\n" allCmds}
   '';
 
-  mountConditions = lib.concatMapStringsSep "," (
-    root: "task/mount-${escapePath root}/success"
-  ) (lib.attrNames cfg.preserveAt);
+  mountConditions = lib.concatMapStringsSep "," (root: "task/mount-${escapePath root}/success") (
+    lib.attrNames cfg.preserveAt
+  );
 in
 {
   imports = [

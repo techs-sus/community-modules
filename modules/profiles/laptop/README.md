@@ -9,15 +9,15 @@ Add this flake as an input and import the module:
 ```nix
 {
   inputs.finix.url = "github:finix-community/finix";
-  inputs.profiles.url = "github:finix-community/finix-profiles";
+  inputs.community-modules.url = "github:finix-community/community-modules";
 
-  outputs = { nixpkgs, finix, profiles, ... }: {
-    nixosConfigurations.mylaptop = finix.lib.nixosSystem {
+  outputs = { nixpkgs, finix, community-modules, ... }: {
+    nixosConfigurations.mylaptop = finix.lib.finixSystem {
       modules = [
-        profiles.nixosModules.laptop
+        community-modules.nixosModules.laptop
         ./configuration.nix
 
-        { nixpkgs.pkgs = import nixpkgs { system = "x86_64-linux"; }; }
+        { nixpkgs.pkgs = nixpkgs.legacyPackages.x86_64-linux; }
       ];
     };
   };
